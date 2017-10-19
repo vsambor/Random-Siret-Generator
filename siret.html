@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Random Siret Generator</title>
+</head>
+
+<body>
+  <script>
+    for (var i = 0; i < 100; ++i) {
+      console.log(getRandomSiret());
+    }
+
+    function getRandomSiret() {
+      var siren = getRandomInt(10000000, 99999999);
+      var nic = getRandomInt(1000, 9999);
+
+      siren = siren.toString().split('');
+      nic = nic.toString().split('');
+
+      var sum = calculateSum(siren.concat(0));
+      siren.push(10 - (sum % 10 == 0 ? 10 : sum % 10));
+
+      sum = calculateSum(siren.concat(nic, 0));
+      nic.push(10 - (sum % 10 == 0 ? 10 : sum % 10));
+
+      return siren.join('') + nic.join('');
+    }
+
+    function calculateSum(number) {
+      var multi = 1;
+      var sum = 0;
+      for (var i = number.length - 1; i >= 0; i--) {
+        var tmp = parseInt(number[i]) * multi;
+        multi = multi == 2 ? 1 : 2;
+        if (tmp > 9) {
+          tmp = 1 + tmp - 10;
+        }
+        sum += tmp;
+      }
+      return sum;
+    }
+
+    // The maximum is inclusive and the minimum is inclusive.
+    function getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+  </script>
+</body>
+
+</html>
